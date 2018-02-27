@@ -1,0 +1,33 @@
+en:
+  settings:
+    github_login_name_field_id: Custom Field for User's Github Login name
+    pr_reviewers_field_id: Custom Field for PR Reviewers
+    pr_targeted_branches_field_id: Custom Field for list of Targeted Branches
+    issue_id_scan_pattern: Issue ID Scan Pattern
+    github_webhook_api_secret: Github Webhook API Secret
+  exceptions:
+    plugin_settings_missing: Plugin settings are missing
+    plugin_setting_key_missing: "Plugin settings key %{key} is missing"
+    malformed_pr_title: "Pull Request title %{title} is malformed, please correct and retry"
+    custom_field_not_found: "Custom Field for '%{name}' was not found in the Database, check and update your settings"
+    user_by_github_login_not_found: "There was no User found in the DB with the associated Github Login Name '%{login_name}'"
+    related_issue_not_found: "The issue with ID '%{id}' was not found in Redmine"
+  views:
+    issue_overview:
+      title: Associated Pull Requests
+      show: Show
+      hide: Hide
+      no_pull_requests_present: There are no associated Pull Requests for this Issue
+      pr_for_repo_name: Pull requests for repository
+      pr_github_id_and_link: Github
+      pr_title: Title
+      head_branch: Head Branch
+      base_branch: Base Branch
+      status: Status
+      targeted_branch: Target
+      labels: Labels
+      reviewers: Reviewers
+      pr_created_at: Created at
+      pr_updated_at: Updated at
+      pr_merged_at: Merged at
+      pr_closed_at: Closed at

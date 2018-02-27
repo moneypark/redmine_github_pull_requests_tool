@@ -1,0 +1,58 @@
+<style type="text/css">
+  #plugin-redmine-github-pull-requests-tool_settings-table th { text-align: right; }
+  #plugin-redmine-github-pull-requests-tool_settings-table th h3 { text-align: center; padding: 20px 0 10px 0; margin: 0; }
+</style>
+<table id="plugin-redmine-github-pull-requests-tool_settings-table">
+  <tbody>
+    <tr>
+      <th><%= t 'settings.issue_id_scan_pattern' %></th>
+      <td>
+        <input type="text" id="settings_issue_id_scan_pattern" name="settings[issue_id_scan_pattern]"
+               value="<%= settings['issue_id_scan_pattern'] %>"> <small>Must be a valid Ruby Regexp</small>
+      </td>
+    </tr>
+    <tr>
+      <th><%= t 'settings.github_webhook_api_secret' %></th>
+      <td>
+        <input type="text" id="settings_github_webhook_api_secret" name="settings[github_webhook_api_secret]"
+               value="<%= settings['github_webhook_api_secret'] %>">
+      </td>
+    </tr>
+    <tr>
+      <th><%= t 'settings.github_login_name_field_id' %></th>
+      <td>
+        <select id="settings_github_login_name_field_id" name="settings[github_login_name_field_id]">
+          <% CustomField.where(type: 'UserCustomField').visible.sorted.each do |custom_field| %>
+            <option
+            <% if settings['github_login_name_field_id'] == custom_field.id %> selected<% end %>
+            value="<%= custom_field.id %>"><%= custom_field.name %></option>
+          <% end %>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th><%= t 'settings.pr_reviewers_field_id' %></th>
+      <td>
+        <select id="settings_pr_assignee_field_id" name="settings[pr_reviewers_field_id]">
+          <% CustomField.where(type: 'IssueCustomField').visible.sorted.each do |custom_field| %>
+            <option
+            <% if settings['pr_reviewers_field_id'] == custom_field.id.to_s %> selected<% end %>
+            value="<%= custom_field.id %>"><%= custom_field.name %></option>
+          <% end %>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th><%= t 'settings.pr_targeted_branches_field_id' %></th>
+      <td>
+        <select id="settings_pr_targeted_branches_field_id" name="settings[pr_targeted_branches_field_id]">
+          <% CustomField.where(type: 'IssueCustomField').visible.sorted.each do |custom_field| %>
+          <option
+            <% if settings['pr_targeted_branches_field_id'] == custom_field.id.to_s %> selected<% end %>
+            value="<%= custom_field.id %>"><%= custom_field.name %></option>
+          <% end %>
+        </select>
+      </td>
+    </tr>
+  </tbody>
+</table>

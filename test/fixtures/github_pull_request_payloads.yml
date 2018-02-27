@@ -1,0 +1,377 @@
+# All of the payloads are based on the Github Developer Guide
+# https://developer.github.com/v3/activity/events/types/#pullrequestevent
+#
+# Possible actions for the Pull Request event:
+#
+# * assigned
+# * unassigned
+# * review_requested
+# * review_request_removed
+# * labeled
+# * unlabeled
+# * opened
+# * edited
+# * merged
+# * closed
+# * reopened
+#
+# Pull Request Event Payload Structure Components:
+#
+# PAYLOAD (Contains all the associated data with the Pull Request and the Repo)
+# PULL_REQUEST (Contains all the associated data with the Pull Request)
+# BRANCH (Contains the label, USER and REPO, urls)
+# REPO (Contains Owner [Which is a USER], ID, urls)
+# USER (Contains Github Login Name, ID, urls)
+# LABEL (Reflects a label with its name, color, ID and url)
+# REVIEWERS* (Contains an array of USERs which are the reviewers)
+#   * = Only if action is review_requested or review_request_removed, otherwise it is not present in the payload
+# LABELS* (Contains an array of LABELs assigned to the Pull Request)
+#   * = Only if action is edited, labeled or unlabeled, otherwise it is not present in the payload
+# LINKS (Contains links related to the Pull Request)
+# INSTALLATION (Contains the installation ID)
+#
+# A Pull Request Payload has the following layout:
+#
+# Payload - PAYLOAD
+#   - PullRequest - PULL_REQUEST
+#     - Base - BRANCH
+#       - User - USER
+#       - Repo - REPO
+#     - Head - BRANCH
+#       - User - USER
+#       - Repo - REPO
+#     - User - USER
+#     - Links - LINKS
+#     - RequestedReviewers* - REVIEWERS*
+#     - Labels* - LABELS*
+#   - Repository - REPO
+#     - Owner - USER
+#   - Sender - USER
+#   - Installation - INSTALLATION
+#
+# Use YAML to construct a bunch of textures to use in the unit tests
+---
+# Set up some Github Users based on the API Docs
+user_1: &USER_1
+  login: baxterthehacker
+  id: 6752317
+  avatar_url: https://avatars.githubusercontent.com/u/6752317?v=3
+  gravatar_id: ''
+  url: https://api.github.com/users/baxterthehacker
+  html_url: https://github.com/baxterthehacker
+  followers_url: https://api.github.com/users/baxterthehacker/followers
+  following_url: https://api.github.com/users/baxterthehacker/following{/other_user}
+  gists_url: https://api.github.com/users/baxterthehacker/gists{/gist_id}
+  starred_url: https://api.github.com/users/baxterthehacker/starred{/owner}{/repo}
+  subscriptions_url: https://api.github.com/users/baxterthehacker/subscriptions
+  organizations_url: https://api.github.com/users/baxterthehacker/orgs
+  repos_url: https://api.github.com/users/baxterthehacker/repos
+  events_url: https://api.github.com/users/baxterthehacker/events{/privacy}
+  received_events_url: https://api.github.com/users/baxterthehacker/received_events
+  type: User
+  site_admin: false
+
+user_2: &USER_2
+  login: baxterthehacker2
+  id: 6752318
+  avatar_url: https://avatars.githubusercontent.com/u/6752318?v=3
+  gravatar_id: ''
+  url: https://api.github.com/users/baxterthehacker2
+  html_url: https://github.com/baxterthehacker2
+  followers_url: https://api.github.com/users/baxterthehacker2/followers
+  following_url: https://api.github.com/users/baxterthehacker2/following{/other_user}
+  gists_url: https://api.github.com/users/baxterthehacker2/gists{/gist_id}
+  starred_url: https://api.github.com/users/baxterthehacker2/starred{/owner}{/repo}
+  subscriptions_url: https://api.github.com/users/baxterthehacker2/subscriptions
+  organizations_url: https://api.github.com/users/baxterthehacker2/orgs
+  repos_url: https://api.github.com/users/baxterthehacker2/repos
+  events_url: https://api.github.com/users/baxterthehacker2/events{/privacy}
+  received_events_url: https://api.github.com/users/baxterthehacker2/received_events
+  type: User
+  site_admin: false
+
+user_3: &USER_3
+  login: baxterthehacker3
+  id: 6752319
+  avatar_url: https://avatars.githubusercontent.com/u/6752319?v=3
+  gravatar_id: ''
+  url: https://api.github.com/users/baxterthehacker3
+  html_url: https://github.com/baxterthehacker3
+  followers_url: https://api.github.com/users/baxterthehacker3/followers
+  following_url: https://api.github.com/users/baxterthehacker3/following{/other_user}
+  gists_url: https://api.github.com/users/baxterthehacker3/gists{/gist_id}
+  starred_url: https://api.github.com/users/baxterthehacker3/starred{/owner}{/repo}
+  subscriptions_url: https://api.github.com/users/baxterthehacker3/subscriptions
+  organizations_url: https://api.github.com/users/baxterthehacker3/orgs
+  repos_url: https://api.github.com/users/baxterthehacker3/repos
+  events_url: https://api.github.com/users/baxterthehacker3/events{/privacy}
+  received_events_url: https://api.github.com/users/baxterthehacker3/received_events
+  type: User
+  site_admin: false
+
+# Set up some Labels based on the API Docs
+label_1: &LABEL_1
+  id: 208045946
+  url: "https://api.github.com/repos/baxterthehacker/public-repo/labels/bug"
+  name: Bug
+  color: fc2929
+  default: false
+
+label_2: &LABEL_2
+  id: 208045947
+  url: "https://api.github.com/repos/baxterthehacker/public-repo/labels/feature"
+  name: Feature
+  color: ffccee
+  default: false
+
+label_3: &LABEL_3
+  id: 208045948,
+  url: "https://api.github.com/repos/baxterthehacker/public-repo/labels/do-not-merge"
+  name: Do not merge
+  color: eeccff
+  default: true
+
+# Set up a Repo based on the API Docs
+repo: &REPO
+  id: 35129377
+  name: public-repo
+  full_name: baxterthehacker/public-repo
+  private: false
+  html_url: https://github.com/baxterthehacker/public-repo
+  description: ''
+  fork: false
+  url: https://api.github.com/repos/baxterthehacker/public-repo
+  forks_url: https://api.github.com/repos/baxterthehacker/public-repo/forks
+  keys_url: https://api.github.com/repos/baxterthehacker/public-repo/keys{/key_id}
+  collaborators_url: https://api.github.com/repos/baxterthehacker/public-repo/collaborators{/collaborator}
+  teams_url: https://api.github.com/repos/baxterthehacker/public-repo/teams
+  hooks_url: https://api.github.com/repos/baxterthehacker/public-repo/hooks
+  issue_events_url: https://api.github.com/repos/baxterthehacker/public-repo/issues/events{/number}
+  events_url: https://api.github.com/repos/baxterthehacker/public-repo/events
+  assignees_url: https://api.github.com/repos/baxterthehacker/public-repo/assignees{/user}
+  branches_url: https://api.github.com/repos/baxterthehacker/public-repo/branches{/branch}
+  tags_url: https://api.github.com/repos/baxterthehacker/public-repo/tags
+  blobs_url: https://api.github.com/repos/baxterthehacker/public-repo/git/blobs{/sha}
+  git_tags_url: https://api.github.com/repos/baxterthehacker/public-repo/git/tags{/sha}
+  git_refs_url: https://api.github.com/repos/baxterthehacker/public-repo/git/refs{/sha}
+  trees_url: https://api.github.com/repos/baxterthehacker/public-repo/git/trees{/sha}
+  statuses_url: https://api.github.com/repos/baxterthehacker/public-repo/statuses/{sha}
+  languages_url: https://api.github.com/repos/baxterthehacker/public-repo/languages
+  stargazers_url: https://api.github.com/repos/baxterthehacker/public-repo/stargazers
+  contributors_url: https://api.github.com/repos/baxterthehacker/public-repo/contributors
+  subscribers_url: https://api.github.com/repos/baxterthehacker/public-repo/subscribers
+  subscription_url: https://api.github.com/repos/baxterthehacker/public-repo/subscription
+  commits_url: https://api.github.com/repos/baxterthehacker/public-repo/commits{/sha}
+  git_commits_url: https://api.github.com/repos/baxterthehacker/public-repo/git/commits{/sha}
+  comments_url: https://api.github.com/repos/baxterthehacker/public-repo/comments{/number}
+  issue_comment_url: https://api.github.com/repos/baxterthehacker/public-repo/issues/comments{/number}
+  contents_url: https://api.github.com/repos/baxterthehacker/public-repo/contents/{+path}
+  compare_url: https://api.github.com/repos/baxterthehacker/public-repo/compare/{base}...{head}
+  merges_url: https://api.github.com/repos/baxterthehacker/public-repo/merges
+  archive_url: https://api.github.com/repos/baxterthehacker/public-repo/{archive_format}{/ref}
+  downloads_url: https://api.github.com/repos/baxterthehacker/public-repo/downloads
+  issues_url: https://api.github.com/repos/baxterthehacker/public-repo/issues{/number}
+  pulls_url: https://api.github.com/repos/baxterthehacker/public-repo/pulls{/number}
+  milestones_url: https://api.github.com/repos/baxterthehacker/public-repo/milestones{/number}
+  notifications_url: https://api.github.com/repos/baxterthehacker/public-repo/notifications{?since,all,participating}
+  labels_url: https://api.github.com/repos/baxterthehacker/public-repo/labels{/name}
+  releases_url: https://api.github.com/repos/baxterthehacker/public-repo/releases{/id}
+  created_at: <%= 4.weeks.ago.iso8601 %>
+  updated_at: <%= 1.week.ago.iso8601 %>
+  pushed_at: <%= 4.days.ago.iso8601 %>
+  git_url: git://github.com/baxterthehacker/public-repo.git
+  ssh_url: git@github.com:baxterthehacker/public-repo.git
+  clone_url: https://github.com/baxterthehacker/public-repo.git
+  svn_url: https://github.com/baxterthehacker/public-repo
+  homepage:
+  size: 0
+  stargazers_count: 0
+  watchers_count: 0
+  language:
+  has_issues: true
+  has_downloads: true
+  has_wiki: true
+  has_pages: true
+  forks_count: 0
+  mirror_url:
+  open_issues_count: 1
+  forks: 0
+  open_issues: 1
+  watchers: 0
+  default_branch: master
+  owner: *USER_1
+
+# Set up the links based on the API Docs
+links: &LINKS
+  self:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/pulls/1
+  html:
+    href: https://github.com/baxterthehacker/public-repo/pull/1
+  issue:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/issues/1
+  comments:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/issues/1/comments
+  review_comments:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/pulls/1/comments
+  review_comment:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/pulls/comments{/number}
+  commits:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/pulls/1/commits
+  statuses:
+    href: https://api.github.com/repos/baxterthehacker/public-repo/statuses/0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c
+
+# Branch templates
+default_branch: &DEFAULT_BRANCH
+  repo: *REPO
+  user: *USER_1
+  label:
+  ref:
+  sha:
+
+base_branch: &BASE_BRANCH
+  <<: *DEFAULT_BRANCH
+  label: baxterthehacker:master
+  ref: master
+  sha: 9049f1265b7d61be4a8904a9a27120d2064dab3b
+
+head_branch: &HEAD_BRANCH
+  <<: *DEFAULT_BRANCH
+  label: baxterthehacker:changes
+  ref: changes
+  sha: 0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c
+
+# Pull Request templates
+default_pull_request: &DEFAULT_PULL_REQUEST
+  url: https://api.github.com/repos/baxterthehacker/public-repo/pulls/1
+  id: 34778301
+  html_url: https://github.com/baxterthehacker/public-repo/pull/1
+  diff_url: https://github.com/baxterthehacker/public-repo/pull/1.diff
+  patch_url: https://github.com/baxterthehacker/public-repo/pull/1.patch
+  issue_url: https://api.github.com/repos/baxterthehacker/public-repo/issues/1
+  number: 1
+  state: unknown
+  locked: false
+  title: '' # This has to be set within the unit tests
+  base: *BASE_BRANCH
+  head: *HEAD_BRANCH
+  user: *USER_1
+  links: *LINKS
+  merged: unknown
+  mergeable: 
+  mergeable_state: unknown
+  merged_by: 
+  comments: 0
+  review_comments: 0
+  commits: 1
+  additions: 1
+  deletions: 1
+  changed_files: 1
+  body: This is a pretty simple change that we need to pull into master.
+  created_at: <%= 2.days.ago.iso8601 %>
+  updated_at: <%= 1.day.ago.iso8601 %>
+  closed_at: 
+  merged_at: 
+  merge_commit_sha: 
+  assignee: 
+  milestone: 
+  commits_url: https://api.github.com/repos/baxterthehacker/public-repo/pulls/1/commits
+  review_comments_url: https://api.github.com/repos/baxterthehacker/public-repo/pulls/1/comments
+  review_comment_url: https://api.github.com/repos/baxterthehacker/public-repo/pulls/comments{/number}
+  comments_url: https://api.github.com/repos/baxterthehacker/public-repo/issues/1/comments
+  statuses_url: https://api.github.com/repos/baxterthehacker/public-repo/statuses/0d1a26e67d8f5eaf1f6ba5c57fc3c7d91ac0fd1c
+
+open_pull_request: &OPEN_PULL_REQUEST
+  <<: *DEFAULT_PULL_REQUEST
+  state: open
+  merged: false
+
+closed_pull_request: &CLOSED_PULL_REQUEST
+  <<: *DEFAULT_PULL_REQUEST
+  state: closed
+  merged: false
+  closed_at: <%= 6.hours.ago.iso8601 %>
+
+merged_pull_request: &MERGED_PULL_REQUEST
+  <<: *DEFAULT_PULL_REQUEST
+  state: closed
+  merged: true
+  merged_at: <%= 3.hours.ago.iso8601 %>
+
+# Payload templates
+default_payload: &DEFAULT_PAYLOAD
+  action: unknown
+  number: 1
+  pull_request: *DEFAULT_PULL_REQUEST
+  repository: *REPO
+  sender: *USER_1
+  installation:
+    id: 234
+
+merged_payload: &MERGED_PAYLOAD
+  <<: *DEFAULT_PAYLOAD
+  pull_request: *MERGED_PULL_REQUEST
+
+closed_payload: &CLOSED_PAYLOAD
+  <<: *DEFAULT_PAYLOAD
+  pull_request: *CLOSED_PULL_REQUEST
+
+# Create a payload for each possible action
+payload_assigned:
+  <<: *DEFAULT_PAYLOAD
+  action: assigned
+
+payload_unassigned:
+  <<: *DEFAULT_PAYLOAD
+  action: unassigned
+
+payload_review_requested:
+  <<: *DEFAULT_PAYLOAD
+  action: review_requested
+  reviewers:
+    - *USER_2
+    - *USER_3
+
+payload_review_request_removed:
+  <<: *DEFAULT_PAYLOAD
+  action: review_request_removed
+  reviewers:
+    - *USER_3
+
+payload_labeled:
+  <<: *DEFAULT_PAYLOAD
+  action: labeled
+  labels:
+    - *LABEL_1
+    - *LABEL_2
+    - *LABEL_3
+
+payload_unlabeled:
+  <<: *DEFAULT_PAYLOAD
+  action: unlabeled
+  labels:
+    - *LABEL_1
+    - *LABEL_3
+
+payload_opened:
+  <<: *DEFAULT_PAYLOAD
+  action: opened
+
+payload_edited:
+  <<: *DEFAULT_PAYLOAD
+  action: edited
+  labels:
+    - *LABEL_1
+    - *LABEL_2
+    - *LABEL_3
+
+payload_merged:
+  <<: *MERGED_PAYLOAD
+  action: merged
+
+payload_closed:
+  <<: *CLOSED_PAYLOAD
+  action: closed
+
+payload_reopened:
+  <<: *CLOSED_PAYLOAD
+  action: reopened

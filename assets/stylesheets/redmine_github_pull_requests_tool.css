@@ -1,0 +1,81 @@
+#plugin-redmine-github-pull-requests-tool_issue-tree table {
+    width: 100%;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree th,
+#plugin-redmine-github-pull-requests-tool_issue-tree td {
+    text-align: left;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree th.pr-repo_name-caption {
+    padding: 3px;
+    font-weight: bold;
+    background: darkgray;
+    text-align: center;
+    color: white;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-status-open {
+    display: inline-block;
+    padding: 2px;
+    margin: 1px 2px 1px 0;
+    border-radius: 2px;
+    background-color: #2cbe4e;
+    color: white;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-status-merged {
+    display: inline-block;
+    padding: 2px;
+    margin: 1px 2px 1px 0;
+    border-radius: 2px;
+    background-color: #6f42c1;
+    color: white;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-status-closed {
+    display: inline-block;
+    padding: 2px;
+    margin: 1px 2px 1px 0;
+    border-radius: 2px;
+    background-color: #cb2431;
+    color: white;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-label {
+    display: inline-block;
+    padding: 2px;
+    margin: 1px 2px 1px 0;
+    border-radius: 2px;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-reviewers a {
+    display: inline-block;
+    padding: 2px;
+    margin: 1px 2px 1px 0;
+    border-radius: 2px;
+    background: #2cbe4e;
+    color: white;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-action-created {
+    color: #2cbe4e;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-action-updated {
+    color: #0366d6;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-action-merged {
+    color: #6f42c1;
+}
+
+#plugin-redmine-github-pull-requests-tool_issue-tree .pr-action-closed {
+    color: #cb2431;
+}

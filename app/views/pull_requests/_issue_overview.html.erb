@@ -1,0 +1,104 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'redmine_github_pull_requests_tool', plugin: 'redmine_github_pull_requests_tool' %>
+  <%= javascript_include_tag 'js_cookie', plugin: 'redmine_github_pull_requests_tool' %>
+  <%= javascript_include_tag 'redmine_github_pull_requests_tool', plugin: 'redmine_github_pull_requests_tool' %>
+<% end %>
+<div id="plugin-redmine-github-pull-requests-tool_issue-tree">
+  <hr>
+  <% unless @issue.pull_requests.empty? %>
+    <div class="contextual">
+      <a class="icon icon-magnifier" href="javascript:;" onclick="showAllPullRequests();"><%= t('views.issue_overview.show') %></a>
+      <a class="icon icon-close" href="javascript:;" onclick="hideAllPullRequests();"><%= t('views.issue_overview.hide') %></a>
+    </div>
+  <% end %>
+  <p>
+    <strong><%= t('views.issue_overview.title') %></strong> (<%= @issue.pull_requests.size %>)
+  </p>
+  <% if @issue.pull_requests.empty? %>
+    <em><%= t('views.issue_overview.no_pull_requests_present') %></em>
+  <% else %>
+    <table class="list odd-even pull-requests-list" width="100%"
+      <% if cookies['pull_request_display'] and cookies['pull_request_display'] == 'hide' %>
+        style="display: none;"
+      <% end %>
+      >
+      <colgroup>
+        <col width="75">
+        <col width="75">
+        <col width="125">
+        <col>
+        <col>
+        <col width="100">
+        <col width="100">
+        <col width="100">
+        <col width="100">
+      </colgroup>
+      <thead>
+        <tr>
+          <th><%= t('views.issue_overview.pr_github_id_and_link') %></th>
+          <th><%= t('views.issue_overview.status') %></th>
+          <th><%= t('views.issue_overview.base_branch') %></th>
+          <th><%= t('views.issue_overview.labels') %></th>
+          <th><%= t('views.issue_overview.reviewers') %></th>
+          <th><%= t('views.issue_overview.pr_created_at') %></th>
+          <th><%= t('views.issue_overview.pr_updated_at') %></th>
+          <th><%= t('views.issue_overview.pr_merged_at') %></th>
+          <th><%= t('views.issue_overview.pr_closed_at') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @issue.pull_requests.pluck(:repo_name).uniq.sort.each do |repo_name| %>
+          <tr>
+            <th colspan="11" class="pr-repo_name-caption">
+              <%= t('views.issue_overview.pr_for_repo_name') %> &laquo;<%= repo_name %>&raquo;
+            </th>
+          </tr>
+          <% @issue.pull_requests.where(repo_name: repo_name).order(github_number: :asc).each do |pull_request| %>
+            <tr class="<%= cycle 'odd', 'even' %>" title="<%= pull_request.title %>">
+              <td><a href="<%= pull_request.github_url %>" target="_blank"><%= pull_request.github_number %></a></td>
+              <td><span class="pr-status-<%= pull_request.status %>"><%= pull_request.status %></span></td>
+              <td><code><%= pull_request.base_branch_ref %></code></td>
+              <td>
+                <% pull_request.labels.each do |label| %>
+                  <span
+                    class="pr-label"
+                    style="background-color: <%= label.bg_color_for_html %>; color: <%= label.fg_color_for_html %>;">
+                    <%= label.name %></span>
+                <% end %>
+              </td>
+              <td class="pr-reviewers">
+                <% pull_request.reviewers.each do |reviewer| %>
+                  <%= link_to_user(reviewer) %>
+                <% end %>
+              </td>
+              <% if pull_request.pr_created_at.nil? %>
+                <td></td>
+              <% else %>
+                <td class="pr-action-created" title="<%= pull_request.pr_created_at.strftime '%H:%M:%S' %>">
+                  <%= pull_request.pr_created_at.strftime '%d.%m.%Y' %></td>
+              <% end %>
+              <% if pull_request.pr_updated_at.nil? %>
+                <td></td>
+              <% else %>
+                <td class="pr-action-updated" title="<%= pull_request.pr_updated_at.strftime '%H:%M:%S' %>">
+                  <%= pull_request.pr_updated_at.strftime '%d.%m.%Y' %></td>
+              <% end %>
+              <% if pull_request.pr_merged_at.nil? %>
+                <td></td>
+              <% else %>
+                <td class="pr-action-merged" title="<%= pull_request.pr_merged_at.strftime '%H:%M:%S' %>">
+                  <%= pull_request.pr_merged_at.strftime '%d.%m.%Y' %></td>
+              <% end %>
+              <% if pull_request.pr_closed_at.nil? %>
+                <td></td>
+              <% else %>
+                <td class="pr-action-closed" title="<%= pull_request.pr_closed_at.strftime '%H:%M:%S' %>">
+                  <%= pull_request.pr_closed_at.strftime '%d.%m.%Y' %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

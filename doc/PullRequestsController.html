@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: PullRequestsController
+  
+    &mdash; Documentation by YARD 0.9.12
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "PullRequestsController";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (P)</a> &raquo;
+    
+    
+    <span class="title">PullRequestsController</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: PullRequestsController
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">ActionController::Base</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">ActionController::Base</li>
+          
+            <li class="next">PullRequestsController</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd>GithubWebhook::Processor</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>app/controllers/pull_requests_controller.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Provides an endpoint to Github Webhooks to receive payloads related to Pull
+Requests It relies on the “github_webhook” gem to facilitate authentication
+and easier payload handling. Also this class relies on Github Event API V3
+data, please refer to its documentation.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="https://developer.github.com/v3/activity/events/types/#pullrequestevent" target="_parent" title="Github Webhook API">Github Webhook API</a></li>
+    
+      <li><a href="https://github.com/ssaunier/github_webhook" target="_parent" title="Github Webhook Gem">Github Webhook Gem</a></li>
+    
+  </ul>
+
+</div>
+  <h2>Constant Summary</h2>
+  <dl class="constants">
+    
+      <dt id="ASSIGN_LABELS_ACTION_REXP-constant" class="">ASSIGN_LABELS_ACTION_REXP =
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Regexp which decides if the action of the API payload contains the labels</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^edited|.*labeled$</span><span class='regexp_end'>/i</span></span></pre></dd>
+    
+      <dt id="ASSIGN_REVIEWERS_ACTION_REXP-constant" class="">ASSIGN_REVIEWERS_ACTION_REXP =
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Regexp which decides if the action of the API payload contains the
+reviewers</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+      </dt>
+      <dd><pre class="code"><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^review_request.*|synchronize$</span><span class='regexp_end'>/i</span></span></pre></dd>
+    
+  </dl>
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#github_pull_request-instance_method" title="#github_pull_request (instance method)">#<strong>github_pull_request</strong>(payload)  &#x21d2; nil </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Use the GithubWebhook gem to listen to PullRequestEvents.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="github_pull_request-instance_method">
+  
+    #<strong>github_pull_request</strong>(payload)  &#x21d2; <tt>nil</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>This controller action has no associated view because it provides a
+response to the client throug respond_to</p>
+</div>
+  </div>
+
+
+<p>Use the GithubWebhook gem to listen to PullRequestEvents</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>payload</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The PullRequest Payload from the Github Event API</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>PluginSettingsMissingError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If the Redmine-Github Pull Requests tool settings were not found</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>PluginSettingsError</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If one of the required settings was not configured</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ActiveRecord::RecordNotFound</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If the linked Redmine Issue could not be found</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'app/controllers/pull_requests_controller.rb', line 25</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_github_pull_request'>github_pull_request</span><span class='lparen'>(</span><span class='id identifier rubyid_payload'>payload</span><span class='rparen'>)</span>
+
+  <span class='comment'># Get the issue ID from the title
+</span>  <span class='id identifier rubyid_issue_id'>issue_id</span> <span class='op'>=</span> <span class='id identifier rubyid_get_issue_id'>get_issue_id</span> <span class='id identifier rubyid_payload'>payload</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pull_request</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>title</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+
+  <span class='comment'># Get the issue itself or fail hard
+</span>  <span class='id identifier rubyid_issue'>issue</span> <span class='op'>=</span> <span class='const'>Issue</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='id identifier rubyid_issue_id'>issue_id</span>
+
+  <span class='comment'># Get or create the DB model for this pull request
+</span>  <span class='id identifier rubyid_pull_request'>pull_request</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="PullRequest.html" title="PullRequest (class)">PullRequest</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find_or_initialize_by'>find_or_initialize_by</span> <span class='label'>github_id:</span> <span class='id identifier rubyid_payload'>payload</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pull_request</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>id</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+
+  <span class='comment'># Put a lock on this pull request for the time being
+</span>  <span class='id identifier rubyid_pull_request'>pull_request</span><span class='period'>.</span><span class='id identifier rubyid_with_lock'>with_lock</span> <span class='kw'>do</span>
+
+    <span class='comment'># Link the issue
+</span>    <span class='id identifier rubyid_pull_request'>pull_request</span><span class='period'>.</span><span class='id identifier rubyid_issue'>issue</span> <span class='op'>=</span> <span class='id identifier rubyid_issue'>issue</span>
+
+    <span class='comment'># Set the basic data which we get from all kind of pull_request events
+</span>    <span class='id identifier rubyid_set_pull_request_base_data'>set_pull_request_base_data</span> <span class='id identifier rubyid_pull_request'>pull_request</span><span class='comma'>,</span> <span class='id identifier rubyid_payload'>payload</span>
+
+    <span class='comment'># List of labels are only submitted on following actions:
+</span>    <span class='comment'># edited, labeled, unlabeled
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_assign_labels_on_action'>assign_labels_on_action</span> <span class='id identifier rubyid_payload'>payload</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>action</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_set_pull_request_labels'>set_pull_request_labels</span> <span class='id identifier rubyid_pull_request'>pull_request</span><span class='comma'>,</span> <span class='id identifier rubyid_payload'>payload</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pull_request</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>labels</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Requested reviewers are only submitted on following actions:
+</span>    <span class='comment'># review_requested, review_request_removed, synchronize
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_assign_reviewers_on_action'>assign_reviewers_on_action</span> <span class='id identifier rubyid_payload'>payload</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>action</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_set_pull_request_reviewers'>set_pull_request_reviewers</span> <span class='id identifier rubyid_pull_request'>pull_request</span><span class='comma'>,</span> <span class='id identifier rubyid_payload'>payload</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pull_request</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>requested_reviewers</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Save or crash the request
+</span>    <span class='id identifier rubyid_pull_request'>pull_request</span><span class='period'>.</span><span class='id identifier rubyid_save!'>save!</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># All relevant data was persisted, now update the issue with the configured custom fields
+</span>  <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Proxies.html" title="RedmineGithubPullRequestsTool::Proxies (module)">Proxies</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Proxies/PullRequestReviewerProxy.html" title="RedmineGithubPullRequestsTool::Proxies::PullRequestReviewerProxy (class)">PullRequestReviewerProxy</a></span></span><span class='period'>.</span><span class='id identifier rubyid_update_issue_reviewers'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Proxies/PullRequestReviewerProxy.html#update_issue_reviewers-class_method" title="RedmineGithubPullRequestsTool::Proxies::PullRequestReviewerProxy.update_issue_reviewers (method)">update_issue_reviewers</a></span></span> <span class='id identifier rubyid_issue'>issue</span>
+  <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Proxies.html" title="RedmineGithubPullRequestsTool::Proxies (module)">Proxies</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Proxies/TargetedBranchesProxy.html" title="RedmineGithubPullRequestsTool::Proxies::TargetedBranchesProxy (class)">TargetedBranchesProxy</a></span></span><span class='period'>.</span><span class='id identifier rubyid_update_targeted_branches'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Proxies/TargetedBranchesProxy.html#update_targeted_branches-class_method" title="RedmineGithubPullRequestsTool::Proxies::TargetedBranchesProxy.update_targeted_branches (method)">update_targeted_branches</a></span></span> <span class='id identifier rubyid_issue'>issue</span>
+
+  <span class='comment'># Return some data to the Github Webhook trigger which might or not be used
+</span>  <span class='id identifier rubyid_success_data'>success_data</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+      <span class='label'>redmine_pull_request_id:</span> <span class='id identifier rubyid_pull_request'>pull_request</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span>
+      <span class='label'>redmine_issue_id:</span> <span class='id identifier rubyid_issue_id'>issue_id</span><span class='comma'>,</span>
+      <span class='label'>redmine_issue_status_id:</span> <span class='id identifier rubyid_issue'>issue</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span>
+      <span class='label'>redmine_issue_status:</span> <span class='id identifier rubyid_issue'>issue</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+  <span class='rbrace'>}</span>
+
+  <span class='comment'># Return success data
+</span>  <span class='id identifier rubyid_respond_to'>respond_to</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_format'>format</span><span class='op'>|</span>
+    <span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_html'>html</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_render'>render</span> <span class='label'>text:</span> <span class='id identifier rubyid_success_data'>success_data</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:ok</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_json'>json</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='id identifier rubyid_success_data'>success_data</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:ok</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+
+<span class='comment'># Rescue and show errors associated to the plugin configuration
+</span><span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions.html" title="RedmineGithubPullRequestsTool::Exceptions (module)">Exceptions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions/CustomFieldNotFoundError.html" title="RedmineGithubPullRequestsTool::Exceptions::CustomFieldNotFoundError (class)">CustomFieldNotFoundError</a></span></span><span class='comma'>,</span>
+       <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions.html" title="RedmineGithubPullRequestsTool::Exceptions (module)">Exceptions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions/PluginSettingsError.html" title="RedmineGithubPullRequestsTool::Exceptions::PluginSettingsError (class)">PluginSettingsError</a></span></span><span class='comma'>,</span>
+       <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions.html" title="RedmineGithubPullRequestsTool::Exceptions (module)">Exceptions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions/PluginSettingsMissingError.html" title="RedmineGithubPullRequestsTool::Exceptions::PluginSettingsMissingError (class)">PluginSettingsMissingError</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='id identifier rubyid_respond_to'>respond_to</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_format'>format</span><span class='op'>|</span>
+    <span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_html'>html</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_render'>render</span> <span class='label'>text:</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:internal_server_error</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_json'>json</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='lbrace'>{</span> <span class='label'>error:</span> <span class='id identifier rubyid_e'>e</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:internal_server_error</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+
+<span class='comment'># Rescue and show errors associated to the submitted payload
+</span><span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions.html" title="RedmineGithubPullRequestsTool::Exceptions (module)">Exceptions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions/MalformedPullRequestTitleError.html" title="RedmineGithubPullRequestsTool::Exceptions::MalformedPullRequestTitleError (class)">MalformedPullRequestTitleError</a></span></span><span class='comma'>,</span>
+       <span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool.html" title="RedmineGithubPullRequestsTool (module)">RedmineGithubPullRequestsTool</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions.html" title="RedmineGithubPullRequestsTool::Exceptions (module)">Exceptions</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedmineGithubPullRequestsTool/Exceptions/RelatedIssueNotFoundError.html" title="RedmineGithubPullRequestsTool::Exceptions::RelatedIssueNotFoundError (class)">RelatedIssueNotFoundError</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='id identifier rubyid_respond_to'>respond_to</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_format'>format</span><span class='op'>|</span>
+    <span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_html'>html</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_render'>render</span> <span class='label'>text:</span> <span class='id identifier rubyid_e'>e</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:bad_request</span> <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_json'>json</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_render'>render</span> <span class='label'>json:</span> <span class='lbrace'>{</span> <span class='label'>error:</span> <span class='id identifier rubyid_e'>e</span> <span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:bad_request</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Wed Mar 14 09:59:22 2018 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.12 (ruby-2.3.0).
+</div>
+
+    </div>
+  </body>
+</html>
