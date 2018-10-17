@@ -38,7 +38,7 @@ Redmine::Plugin.register :redmine_github_pull_requests_tool do
   name 'Github Pull Requests Tool for Redmine plugin'
   author 'MoneyPark AG'
   description 'Provides Github Pull Request integration with Redmine and writes data to custom fields'
-  version '0.1.2'
+  version '0.1.3'
   url 'https://github.com/moneypark/redmine_github_pull_requests_tool'
   author_url 'https://github.com/moneypark/'
 
