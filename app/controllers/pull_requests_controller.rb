@@ -72,7 +72,7 @@ class PullRequestsController < ActionController::Base
 
     # Return success data
     respond_to do |format|
-      format.html { render text: success_data.to_s, status: :ok }
+      format.html { render plain: success_data.to_s, status: :ok }
       format.json { render json: success_data, status: :ok }
     end
 
@@ -81,7 +81,7 @@ class PullRequestsController < ActionController::Base
          RedmineGithubPullRequestsTool::Exceptions::PluginSettingsError,
          RedmineGithubPullRequestsTool::Exceptions::PluginSettingsMissingError => e
     respond_to do |format|
-      format.html { render text: e.to_s, status: :internal_server_error }
+      format.html { render plain: e.to_s, status: :internal_server_error }
       format.json { render json: { error: e }, status: :internal_server_error }
     end
 
@@ -89,7 +89,7 @@ class PullRequestsController < ActionController::Base
   rescue RedmineGithubPullRequestsTool::Exceptions::MalformedPullRequestTitleError,
          RedmineGithubPullRequestsTool::Exceptions::RelatedIssueNotFoundError => e
     respond_to do |format|
-      format.html { render text: e.to_s, status: :bad_request }
+      format.html { render plain: e.to_s, status: :bad_request }
       format.json { render json: { error: e }, status: :bad_request }
     end
 
