@@ -57,5 +57,5 @@ Once the installation is done, go to the Redmine administration
 ### Setting up the Webhook on Github
 Head over to the Settings page of your Repo on Github and set up a Webhook which 
 listens to events of `Pull Requests`. Enter your domain plus the relative part of 
-`/github_api_endpoints/pull_request/`, so that the URL looks like 
-`https://redmine.foo.bar/github_api_endpoints/pull_request/`.
+`/github_webhooks/`, so that the URL looks like 
+`https://redmine.foo.bar/github_webhooks/`.
