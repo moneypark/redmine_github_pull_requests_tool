@@ -24,7 +24,7 @@
         <select id="settings_github_login_name_field_id" name="settings[github_login_name_field_id]">
           <% CustomField.where(type: 'UserCustomField').visible.sorted.each do |custom_field| %>
             <option
-            <% if settings['github_login_name_field_id'] == custom_field.id %> selected<% end %>
+            <% if settings['github_login_name_field_id'] == custom_field.id.to_s %> selected<% end %>
             value="<%= custom_field.id %>"><%= custom_field.name %></option>
           <% end %>
         </select>
