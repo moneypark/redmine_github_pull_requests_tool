@@ -7,6 +7,7 @@
 class PullRequestsController < ActionController::Base
 
   include GithubWebhook::Processor
+  skip_before_action :verify_authenticity_token  # Endpoint is secured by the shared secret with GH Webhook APIs.
 
   # Regexp which decides if the action of the API payload contains the labels
   ASSIGN_LABELS_ACTION_REXP = /^edited|.*labeled$/i
@@ -15,7 +16,7 @@ class PullRequestsController < ActionController::Base
   ASSIGN_REVIEWERS_ACTION_REXP = /^review_request.*|synchronize$/i
 
   # Use the GithubWebhook gem to listen to PullRequestEvents
-  # @note This controller action has no associated view because it provides a response to the client throug respond_to
+  # @note This controller action has no associated view because it provides a response to the client through respond_to
   #
   # @raise [PluginSettingsMissingError] If the Redmine-Github Pull Requests tool settings were not found
   # @raise [PluginSettingsError] If one of the required settings was not configured
@@ -26,15 +27,25 @@ class PullRequestsController < ActionController::Base
 
     # Get the issue ID from the title
     issue_id = get_issue_id payload['pull_request']['title']
+    cache_key = get_cache_key issue_id
 
-    # Get the issue itself or fail hard
-    issue = Issue.find issue_id
+    # To make sure the same issue cant be updated multiple times while one request is open and to
+    # ensure multiprocessing ability, we use the rails caching system to create a lock key on the current issue ID.
+    #
+    # In development or other environments where the NullStore Cache is used, this will produce no errors,
+    # but also the locking will not work because no key can be stored so it cant exist for retrieval.
+    while Rails.cache.exist? cache_key
+      sleep 0.5
+    end
 
-    # Get or create the DB model for this pull request
-    pull_request = PullRequest.find_or_initialize_by github_id: payload['pull_request']['id']
+    Rails.cache.write cache_key, true, expires_in: 3.minutes
 
-    # Put a lock on this pull request for the time being
-    pull_request.with_lock do
+    begin
+      # Get the issue itself or fail
+      issue = Issue.find issue_id
+
+      # Get or create the DB model for this pull request
+      pull_request = PullRequest.find_or_initialize_by github_id: payload['pull_request']['id']
 
       # Link the issue
       pull_request.issue = issue
@@ -56,24 +67,29 @@ class PullRequestsController < ActionController::Base
 
       # Save or crash the request
       pull_request.save!
-    end
 
-    # All relevant data was persisted, now update the issue with the configured custom fields
-    RedmineGithubPullRequestsTool::Proxies::PullRequestReviewerProxy.update_issue_reviewers issue
-    RedmineGithubPullRequestsTool::Proxies::TargetedBranchesProxy.update_targeted_branches issue
+      # All relevant data was persisted, now update the issue with the configured custom fields
+      RedmineGithubPullRequestsTool::Proxies::PullRequestReviewerProxy.update_issue_reviewers issue
+      RedmineGithubPullRequestsTool::Proxies::TargetedBranchesProxy.update_targeted_branches issue
 
-    # Return some data to the Github Webhook trigger which might or not be used
-    success_data = {
-        redmine_pull_request_id: pull_request.id,
-        redmine_issue_id: issue_id,
-        redmine_issue_status_id: issue.status.id,
-        redmine_issue_status: issue.status.name
-    }
+      # Return some data to the Github Webhook trigger which might or not be used
+      success_data = {
+          redmine_pull_request_id: pull_request.id,
+          redmine_issue_id: issue_id,
+          redmine_issue_status_id: issue.status.id,
+          redmine_issue_status: issue.status.name
+      }
 
-    # Return success data
-    respond_to do |format|
-      format.html { render plain: success_data.to_s, status: :ok }
-      format.json { render json: success_data, status: :ok }
+      # Return success data
+      respond_to do |format|
+        format.html { render plain: success_data.to_s, status: :ok }
+        format.json { render json: success_data, status: :ok }
+      end
+
+    ensure
+      # Make sure to unlock the current Issue ID again,
+      # no matter what errors might have happened in the previous try block
+      Rails.cache.delete cache_key
     end
 
   # Rescue and show errors associated to the plugin configuration
@@ -96,6 +112,14 @@ class PullRequestsController < ActionController::Base
   end
 
   private
+  # Create a cache key for an issue lock
+  #
+  # @param [Integer] issue_id Issue Id
+  # @return [String] The cache key
+  def get_cache_key(issue_id)
+    "ghprt_#{issue_id}_lock"
+  end
+
   # Private method to set the base PR data from the Github API Payload
   #
   # @param [PullRequest] pull_request The targeted Pull Request

@@ -1,44 +1,11 @@
 require 'redmine'
 
-# Get ready for Rails 5.1
-if Rails::VERSION::MAJOR >= 5 && Rails::VERSION::MINOR >= 1
-  reloader = ActiveSupport::Reloader
-else
-  reloader = ActionDispatch::Callbacks
-end
-
-# Ensure Patches are applied
-reloader.to_prepare do
-  require_dependency 'issue'
-  require_dependency 'user'
-  require_dependency 'redmine_github_pull_requests_tool/hooks'
-
-  unless Issue.included_modules.include? RedmineGithubPullRequestsTool::IssuePatch
-    Issue.send :include, RedmineGithubPullRequestsTool::IssuePatch
-  end
-
-  unless User.included_modules.include? RedmineGithubPullRequestsTool::UserPatch
-    User.send :include, RedmineGithubPullRequestsTool::UserPatch
-  end
-end
-
-# Set up the modules description under lib/
-
-# This module contains all required hooks, patches, proxies and error classes for this Plugin
-module RedmineGithubPullRequestsTool
-  # This module contains all Proxy classes that handle the exchange of data between the Plugin and
-  # configured custom fields
-  module Proxies; end
-  # This module contains all custom errors that can occur during the processing of a Webhook payload
-  module Exceptions; end
-end
-
 # Setup the plugin
 Redmine::Plugin.register :redmine_github_pull_requests_tool do
   name 'Github Pull Requests Tool for Redmine plugin'
   author 'MoneyPark AG'
   description 'Provides Github Pull Request integration with Redmine and writes data to custom fields'
-  version '0.1.3'
+  version '0.2.0'
   url 'https://github.com/moneypark/redmine_github_pull_requests_tool'
   author_url 'https://github.com/moneypark/'
 
@@ -55,3 +22,13 @@ Redmine::Plugin.register :redmine_github_pull_requests_tool do
     partial: 'settings/pull_requests_tool_settings'
   )
 end
+
+unless Issue.included_modules.include? RedmineGithubPullRequestsTool::IssuePatch
+  Issue.send :include, RedmineGithubPullRequestsTool::IssuePatch
+end
+
+unless User.included_modules.include? RedmineGithubPullRequestsTool::UserPatch
+  User.send :include, RedmineGithubPullRequestsTool::UserPatch
+end
+
+require File.expand_path 'lib/redmine_github_pull_requests_tool/hooks', __dir__
