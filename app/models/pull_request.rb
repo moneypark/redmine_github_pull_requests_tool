@@ -3,6 +3,7 @@
 class PullRequest < ActiveRecord::Base
   belongs_to :issue
   belongs_to :author, class_name: 'User'
+  belongs_to :release, optional: true
   has_and_belongs_to_many :reviewers, class_name: 'User', foreign_key: :pull_request_id
   has_and_belongs_to_many :labels
 

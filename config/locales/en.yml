@@ -27,6 +27,7 @@ en:
       targeted_branch: Target
       labels: Labels
       reviewers: Reviewers
+      release: In Release
       pr_created_at: Created at
       pr_updated_at: Updated at
       pr_merged_at: Merged at

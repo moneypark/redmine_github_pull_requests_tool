@@ -28,6 +28,7 @@
         <col width="125">
         <col>
         <col>
+        <col>
         <col width="100">
         <col width="100">
         <col width="100">
@@ -40,6 +41,7 @@
           <th><%= t('views.issue_overview.base_branch') %></th>
           <th><%= t('views.issue_overview.labels') %></th>
           <th><%= t('views.issue_overview.reviewers') %></th>
+          <th><%= t('views.issue_overview.release') %></th>
           <th><%= t('views.issue_overview.pr_created_at') %></th>
           <th><%= t('views.issue_overview.pr_updated_at') %></th>
           <th><%= t('views.issue_overview.pr_merged_at') %></th>
@@ -70,6 +72,13 @@
                 <% pull_request.reviewers.each do |reviewer| %>
                   <%= link_to_user(reviewer) %>
                 <% end %>
+              </td>
+              <td>
+              <% if pull_request.release %>
+                <%= pull_request.release.name %>
+              <% else %>
+                N/A
+              <% end %>
               </td>
               <% if pull_request.pr_created_at.nil? %>
                 <td></td>
